@@ -4,6 +4,17 @@
  * with transparent source attribution and distinction from demonstration data.
  */
 
+// Helper to prevent XSS by escaping HTML special characters
+const escapeAlertHTML = (str) => {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+};
+
 const AlertsModule = {
   alerts: [],
 
@@ -62,7 +73,7 @@ const AlertsModule = {
         ? `<div style="margin-top: 10px;">
              <strong style="font-size: 0.82rem; color: #f8fafc;">Key Advisory Actions:</strong>
              <ul class="alert-instructions-list">
-               ${alert.instructions.map(inst => `<li>${inst}</li>`).join('')}
+               ${alert.instructions.map(inst => `<li>${escapeAlertHTML(inst)}</li>`).join('')}
              </ul>
            </div>`
         : '';
@@ -72,23 +83,23 @@ const AlertsModule = {
           <div class="alert-header">
             <div>
               <span class="badge ${badgeClass}" style="margin-bottom: 6px;">${badgeText}</span>
-              <h3 class="alert-title">${alert.title}</h3>
+              <h3 class="alert-title">${escapeAlertHTML(alert.title)}</h3>
             </div>
           </div>
 
           <div class="alert-meta">
-            <span><strong>Source:</strong> ${alert.source_organization}</span>
+            <span><strong>Source:</strong> ${escapeAlertHTML(alert.source_organization)}</span>
             <span><strong>Issued:</strong> ${new Date(alert.issue_time).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</span>
             <span><strong>Last Verified:</strong> ${new Date(alert.last_verified_at).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata' })}</span>
           </div>
 
-          <p style="font-size: 0.92rem; color: #f1f5f9; margin-bottom: 8px;"><strong>${alert.headline}</strong></p>
-          <p style="font-size: 0.88rem; color: #cbd5e1; line-height: 1.5;">${alert.advisory_text}</p>
+          <p style="font-size: 0.92rem; color: #f1f5f9; margin-bottom: 8px;"><strong>${escapeAlertHTML(alert.headline)}</strong></p>
+          <p style="font-size: 0.88rem; color: #cbd5e1; line-height: 1.5;">${escapeAlertHTML(alert.advisory_text)}</p>
 
           ${instructionsHtml}
 
           <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; font-size: 0.78rem;">
-            <span style="color: var(--text-dim); font-style: italic;">${alert.disclaimer || 'Verified official bulletin record.'}</span>
+            <span style="color: var(--text-dim); font-style: italic;">${escapeAlertHTML(alert.disclaimer || 'Verified official bulletin record.')}</span>
             ${alert.source_url && !alert.source_url.startsWith('#')
               ? `<a href="${alert.source_url}" target="_blank" rel="noopener noreferrer" style="font-weight: 600;">View Official Source &rarr;</a>`
               : `<span style="color: #ec4899; font-weight: 600;">Synthetic Test Entry</span>`}
@@ -116,15 +127,14 @@ const AlertsModule = {
           <span class="badge ${topAlert.is_demo ? 'badge-demo' : 'badge-official'}">${topAlert.is_demo ? 'DEMO' : (topAlert.severity || 'OFFICIAL')}</span>
           <span style="font-size: 0.72rem; color: var(--text-muted);">${new Date(topAlert.issue_time).toLocaleDateString('en-IN')}</span>
         </div>
-        <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 4px;">${topAlert.title}</h4>
-        <p style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.4;">${topAlert.headline}</p>
+        <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 4px;">${escapeAlertHTML(topAlert.title)}</h4>
+        <p style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.4;">${escapeAlertHTML(topAlert.headline)}</p>
         <div style="margin-top: 8px; text-align: right;">
           <a href="#alerts" data-target-view="alerts" style="font-size: 0.8rem; font-weight: 600;">Read All Bulletins &rarr;</a>
         </div>
       </div>
     `;
 
-    // Rebind inner link
     container.querySelectorAll('[data-target-view]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -139,7 +149,7 @@ const AlertsModule = {
       container.innerHTML = `
         <div class="error-state-card">
           <h3>⚠️ Unable to Load Official Bulletins</h3>
-          <p>${errMsg || 'Failed to connect to the alerts service. If you are offline, cached bulletins will appear when available.'}</p>
+          <p>${escapeAlertHTML(errMsg || 'Failed to connect to the alerts service. If you are offline, cached bulletins will appear when available.')}</p>
           <button class="retry-btn" onclick="AlertsModule.fetchAlerts()">🔄 Retry Ingestion</button>
         </div>
       `;

@@ -1,10 +1,11 @@
+
 /**
  * FloodSense AI 2.0 — Service Worker
- * Provides offline caching for application shell, disaster safety guide,
- * and verified emergency contacts.
+ * Caches the application shell and supports offline fallbacks.
  */
 
-const CACHE_NAME = 'floodsense-v2.0-cache';
+const CACHE_NAME = 'floodsense-v2.1-cache';
+
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -17,110 +18,164 @@ const ASSETS_TO_CACHE = [
   '/js/contacts.js',
   '/js/guide.js',
   '/js/shelters.js',
-  '/js/risk.js',
-  '/api/status',
-  '/api/contacts',
-  '/api/alerts',
-  '/api/shelters',
-  '/api/risk-zones'
+  '/js/risk.js'
 ];
 
+// Install: cache the application shell.
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('[ServiceWorker] Caching app shell & emergency resources');
-      // Cache with error tolerance for dynamic endpoints
-      return Promise.allSettled(
-        ASSETS_TO_CACHE.map((url) =>
-          cache.add(url).catch((err) => {
-            console.warn(`[ServiceWorker] Failed to cache ${url}:`, err.message);
-          })
-        )
-      );
-    })
-  );
-  self.skipWaiting();
-});
-
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((keyList) => {
-      return Promise.all(
-        keyList.map((key) => {
-          if (key !== CACHE_NAME) {
-            console.log('[ServiceWorker] Removing old cache', key);
-            return caches.delete(key);
+    caches.open(CACHE_NAME).then(async (cache) => {
+      await Promise.allSettled(
+        ASSETS_TO_CACHE.map(async (url) => {
+          try {
+            await cache.add(url);
+          } catch (err) {
+            console.warn(
+              `[ServiceWorker] Could not cache ${url}:`,
+              err.message
+            );
           }
         })
       );
     })
   );
+
+  self.skipWaiting();
+});
+
+// Activate: remove older caches owned by this app.
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys.map((key) => {
+          if (key.startsWith('floodsense-') && key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+
+          return Promise.resolve(false);
+        })
+      )
+    )
+  );
+
   self.clients.claim();
 });
 
+// Fetch: use network-first for APIs and cache-first for app assets.
 self.addEventListener('fetch', (event) => {
-  // Only handle GET requests
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
 
-  // Network-first for dynamic API reports, falling back to cache if offline
-  if (url.pathname.startsWith('/api/reports')) {
+  // Do not intercept requests to other origins.
+  if (url.origin !== self.location.origin) return;
+
+  // API requests: prefer fresh server data.
+  if (url.pathname.startsWith('/api/')) {
     event.respondWith(
-      fetch(event.request)
-        .then((response) => {
+      (async () => {
+        try {
+          const response = await fetch(event.request);
+
+          // Cache only successful responses.
           if (response.ok) {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+            const cache = await caches.open(CACHE_NAME);
+            await cache.put(event.request, response.clone());
           }
+
           return response;
-        })
-        .catch(() => {
-          return caches.match(event.request).then((cached) => {
-            if (cached) return cached;
+        } catch (err) {
+          const cached = await caches.match(event.request);
+
+          if (cached) {
+            return cached;
+          }
+
+          // Reports endpoint has a specific offline response.
+          if (url.pathname === '/api/reports') {
             return new Response(
               JSON.stringify({
                 offline: true,
                 total: 0,
                 reports: [],
-                message: 'Operating in offline mode. Live community submissions require network connectivity.'
+                message:
+                  'Offline mode: live community reports are unavailable.'
               }),
-              { headers: { 'Content-Type': 'application/json' } }
+              {
+                status: 200,
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              }
             );
-          });
-        })
+          }
+
+          return new Response(
+            JSON.stringify({
+              offline: true,
+              message: 'This information is unavailable offline.'
+            }),
+            {
+              status: 503,
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }
+          );
+        }
+      })()
     );
+
     return;
   }
 
-  // Cache-first for static assets, network fallback
+  // App assets: use cache first, then fetch from the server.
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        // Background revalidate
-        fetch(event.request)
-          .then((networkResponse) => {
-            if (networkResponse.ok) {
-              caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse));
-            }
-          })
-          .catch(() => { /* offline silent */ });
-        return cachedResponse;
+    (async () => {
+      const cached = await caches.match(event.request);
+
+      if (cached) {
+        // Refresh the cache in the background.
+        event.waitUntil(
+          fetch(event.request)
+            .then(async (response) => {
+              if (response.ok) {
+                const cache = await caches.open(CACHE_NAME);
+                await cache.put(event.request, response.clone());
+              }
+            })
+            .catch(() => {
+              // Network may be unavailable.
+            })
+        );
+
+        return cached;
       }
 
-      return fetch(event.request).then((networkResponse) => {
-        if (networkResponse.ok && event.request.url.startsWith(self.location.origin)) {
-          const clone = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+      try {
+        const response = await fetch(event.request);
+
+        if (response.ok) {
+          const cache = await caches.open(CACHE_NAME);
+          await cache.put(event.request, response.clone());
         }
-        return networkResponse;
-      }).catch((err) => {
-        // Return offline fallback if navigating to an HTML page
+
+        return response;
+      } catch (err) {
         if (event.request.mode === 'navigate') {
-          return caches.match('/index.html');
+          const offlinePage = await caches.match('/index.html');
+
+          if (offlinePage) return offlinePage;
         }
-        throw err;
-      });
-    })
+
+        return new Response('Content unavailable offline.', {
+          status: 503,
+          headers: {
+            'Content-Type': 'text/plain'
+          }
+        });
+      }
+    })()
   );
 });
