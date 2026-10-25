@@ -1,0 +1,21 @@
+{
+  "name": "floodsense-ai-2.0",
+  "version": "2.0.0",
+  "description": "FloodSense AI 2.0 — Flood Emergency Companion for Chennai, Tamil Nadu",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "floodsense",
+    "chennai",
+    "flood-emergency",
+    "disaster-management",
+    "hackathon",
+    "leaflet",
+    "pwa"
+  ],
+  "author": "FloodSense AI Team",
+  "license": "MIT"
+}

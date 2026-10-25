@@ -1,0 +1,110 @@
+{
+  "metadata": {
+    "model_name": "FloodSense Chennai Ward Vulnerability Heuristic Model (v2.0-Alpha)",
+    "target_area": "Greater Chennai Corporation (15 Zones)",
+    "status": "EXPERIMENTAL INDICATOR — NOT AN OFFICIAL FLOOD FORECAST",
+    "disclaimer": "This score is a transparent rule-based heuristic designed for situational awareness during heavy rainfall. It combines published historical waterlogging frequency, low-lying elevation traits, and drainage basin capacity. It does NOT guarantee water levels or replace official IMD/CWC warnings.",
+    "formula_description": "Composite Risk Score (0 - 100) = (Historical Vulnerability Weight * 40%) + (Elevation Depression Factor * 30%) + (Drainage Basin Bottleneck Factor * 30%). Rainfall intensity multiplier scales the baseline risk.",
+    "official_references": [
+      "Greater Chennai Corporation Comprehensive Stormwater Drainage Master Plan",
+      "Tamil Nadu State Disaster Management Authority Vulnerability Atlas",
+      "Central Water Commission (CWC) Chennai Basins Historical Flood Levels"
+    ]
+  },
+  "rainfall_brackets": [
+    { "label": "Normal / Light (< 15 mm/day)", "multiplier": 0.5, "implication": "Nominal drainage capacity sufficient" },
+    { "label": "Moderate Rain (15 - 64 mm/day)", "multiplier": 1.0, "implication": "Localised pooling in chronic depressions" },
+    { "label": "Heavy Rain (65 - 115 mm/day)", "multiplier": 1.4, "implication": "Secondary canal overflows, slow runoff" },
+    { "label": "Very Heavy Rain (> 115 mm/day)", "multiplier": 1.8, "implication": "Widespread waterlogging across floodplains" }
+  ],
+  "zones": [
+    {
+      "zone_id": 13,
+      "zone_name": "Adyar / Velachery",
+      "basin": "Adyar River & Pallikaranai Marshland",
+      "elevation_trait": "Low-lying marshland edge / flat basin (< 5m MSL)",
+      "drainage_outlet": "Okkiyam Madavu to Kovalam Creek (Constrained)",
+      "base_vulnerability_score": 88,
+      "historical_frequency": "Very High",
+      "key_chronic_spots": ["Velachery 100ft Road", "Ram Nagar", "Kalki Nagar", "Vijayanagar"],
+      "recommended_action": "Avoid parking vehicles in basements during Orange/Red alerts. Move essentials above ground level."
+    },
+    {
+      "zone_id": 14,
+      "zone_name": "Perungudi / Madipakkam",
+      "basin": "South Buckingham Canal & Pallikaranai",
+      "elevation_trait": "Former lake bed / depression (< 4m MSL)",
+      "drainage_outlet": "South Buckingham Canal (Tidal lock risk)",
+      "base_vulnerability_score": 85,
+      "historical_frequency": "Very High",
+      "key_chronic_spots": ["Madipakkam Koot Road", "Kubera Nagar", "Balaiah Garden"],
+      "recommended_action": "Monitor municipal motor pump advisories. Secure power inverters and ground floor appliances."
+    },
+    {
+      "zone_id": 6,
+      "zone_name": "Thiru-Vi-Ka Nagar / Kolathur",
+      "basin": "Otteri Nullah & Kosasthalaiyar Basin",
+      "elevation_trait": "Low elevation basin (< 6m MSL)",
+      "drainage_outlet": "Otteri Nullah to Buckingham Canal",
+      "base_vulnerability_score": 78,
+      "historical_frequency": "High",
+      "key_chronic_spots": ["Retteri Junction", "Kolathur Main Road", "SRP Colony"],
+      "recommended_action": "Stay clear of open drains and underpasses during intense cloud bursts."
+    },
+    {
+      "zone_id": 10,
+      "zone_name": "Kodambakkam / T. Nagar",
+      "basin": "Mambalam Canal to Adyar River",
+      "elevation_trait": "Dense urban flatland (6-8m MSL)",
+      "drainage_outlet": "Mambalam Canal (Prone to trash choke points)",
+      "base_vulnerability_score": 72,
+      "historical_frequency": "High",
+      "key_chronic_spots": ["Bazullah Road", "GN Chetty Road", "Usman Road Subways"],
+      "recommended_action": "Subway closures frequent; use elevated flyovers."
+    },
+    {
+      "zone_id": 4,
+      "zone_name": "Tondiarpet / Vyasarpadi",
+      "basin": "Captain Cotton Canal & North Buckingham",
+      "elevation_trait": "Coastal low-lying basin (< 3m MSL)",
+      "drainage_outlet": "Ennore Creek via Buckingham Canal",
+      "base_vulnerability_score": 75,
+      "historical_frequency": "High",
+      "key_chronic_spots": ["Ganesapuram Subway", "MKB Nagar", "Vyasarpadi Jeeva Station"],
+      "recommended_action": "Watch for sea-surge high tide warnings that delay canal drainage."
+    },
+    {
+      "zone_id": 8,
+      "zone_name": "Anna Nagar / Shenoy Nagar",
+      "basin": "Cooum River Basin",
+      "elevation_trait": "Moderate elevation (9-12m MSL)",
+      "drainage_outlet": "Cooum River Diversion Channel",
+      "base_vulnerability_score": 45,
+      "historical_frequency": "Low-Moderate",
+      "key_chronic_spots": ["Shenoy Nagar subway", "Aminjikarai low pockets"],
+      "recommended_action": "Arterial roads generally clear except for underpass sumps."
+    },
+    {
+      "zone_id": 9,
+      "zone_name": "Teynampet / Mylapore",
+      "basin": "Adyar / Cooum divide",
+      "elevation_trait": "Moderate elevation (8-11m MSL)",
+      "drainage_outlet": "Direct SWD to sea / Buckingham Canal",
+      "base_vulnerability_score": 40,
+      "historical_frequency": "Low-Moderate",
+      "key_chronic_spots": ["TTK Road junction", "Royapettah High Road dip"],
+      "recommended_action": "Rapid drainage along primary SWD channels."
+    },
+    {
+      "zone_id": 12,
+      "zone_name": "Alandur / Guindy",
+      "basin": "Adyar River South Bank",
+      "elevation_trait": "Moderate-high (10-15m MSL with St. Thomas Mount ridge)",
+      "drainage_outlet": "Adyar River (High gradient)",
+      "base_vulnerability_score": 38,
+      "historical_frequency": "Low",
+      "key_chronic_spots": ["Alandur Subway", "Kathipara cloverleaf service lane"],
+      "recommended_action": "High ground; watch for localized runoff from hill slopes."
+    }
+  ]
+}

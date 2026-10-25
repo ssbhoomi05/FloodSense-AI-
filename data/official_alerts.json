@@ -1,0 +1,78 @@
+[
+  {
+    "id": "ALT-2026-IMD-001",
+    "title": "IMD Heavy to Very Heavy Rainfall Advisory",
+    "source_organization": "India Meteorological Department (IMD) - RMC Chennai",
+    "source_url": "https://mausam.imd.gov.in/chennai/",
+    "source_type": "Official Bulletin",
+    "is_demo": false,
+    "severity": "Orange Alert",
+    "issue_time": "2026-10-25T06:00:00+05:30",
+    "last_verified_at": "2026-10-25T08:30:00+05:30",
+    "verification_method": "IMD Regional Daily Weather Forecast Bulletin",
+    "headline": "Isolated heavy to very heavy rainfall expected over Chennai, Tiruvallur, Kanchipuram, and Chengalpattu districts.",
+    "advisory_text": "Squally weather with wind speeds reaching 40-50 kmph gusting to 60 kmph is likely along and off Tamil Nadu coast. Fishermen are advised not to venture into southwest and adjoining westcentral Bay of Bengal. Low-lying areas may experience temporary waterlogging.",
+    "instructions": [
+      "Avoid unnecessary travel to known low-lying waterlogged arterial roads.",
+      "Keep electronic devices and mobile phones fully charged.",
+      "Store sufficient drinking water and non-perishable food supplies.",
+      "Do not touch electrical poles, transformers, or submerged wires."
+    ],
+    "disclaimer": "Official bulletin archive. If live weather changes rapidly, tune in to All India Radio or official TNSDMA updates."
+  },
+  {
+    "id": "ALT-2026-GCC-002",
+    "title": "Greater Chennai Corporation Monsoon Preparedness & Pumping Operations",
+    "source_organization": "Greater Chennai Corporation (GCC) Disaster Management Cell",
+    "source_url": "https://chennaicorporation.gov.in/",
+    "source_type": "Official Advisory",
+    "is_demo": false,
+    "severity": "Advisory",
+    "issue_time": "2026-10-24T18:00:00+05:30",
+    "last_verified_at": "2026-10-25T08:00:00+05:30",
+    "verification_method": "GCC Official Public Health & Engineering Department Circular",
+    "headline": "GCC deploys 900+ high-power dewatering pumps across 15 zones.",
+    "advisory_text": "Subways and vulnerable underpasses are monitored 24/7 with dedicated motor pumps. GCC Helpline 1913 is operational with 50 lines for waterlogging complaints.",
+    "instructions": [
+      "Report blocked storm water drains or water stagnation directly via toll-free 1913.",
+      "Refrain from opening sewer manholes manually to avoid fatal suction hazards."
+    ],
+    "disclaimer": "Verified official administrative notice from Greater Chennai Corporation."
+  },
+  {
+    "id": "ALT-2026-WRD-003",
+    "title": "Water Resources Department (WRD) Reservoir Storage Watch",
+    "source_organization": "Tamil Nadu Water Resources Department (WRD) - Chennai Region",
+    "source_url": "https://www.wrd.tn.gov.in/",
+    "source_type": "Official Bulletin",
+    "is_demo": false,
+    "severity": "Watch",
+    "issue_time": "2026-10-25T07:30:00+05:30",
+    "last_verified_at": "2026-10-25T09:00:00+05:30",
+    "verification_method": "Daily Reservoir Water Level & Inflow Report",
+    "headline": "Poondi, Chembarambakkam, Red Hills, and Cholavaram reservoirs at stable holding capacity.",
+    "advisory_text": "Chembarambakkam is at 68% capacity; Adyar river course currently safe. Controlled buffer releases will be notified 2 hours in advance to riverside communities.",
+    "instructions": [
+      "Residents living within 100 metres of the Adyar and Cooum river basins should monitor flood sirens and local GCC announcements."
+    ],
+    "disclaimer": "Official reservoir monitoring data."
+  },
+  {
+    "id": "ALT-DEMO-SIM-004",
+    "title": "[DEMO SCENARIO] Simulated Flash Flood Advisory — Velachery & Pallikaranai Basin",
+    "source_organization": "FloodSense AI Synthetic Test Harness",
+    "source_url": "#demo-scenario",
+    "source_type": "Demonstration Data",
+    "is_demo": true,
+    "severity": "Simulated Warning",
+    "issue_time": "2026-10-25T09:15:00+05:30",
+    "last_verified_at": "2026-10-25T09:15:00+05:30",
+    "verification_method": "Automated Hackathon Demo Ingestion",
+    "headline": "DEMO ONLY: Water levels in Pallikaranai marsh overflow channel simulated at Level 2.",
+    "advisory_text": "THIS IS A SYNTHETIC SIMULATION FOR SYSTEM VERIFICATION. In an active event, this warning represents rapid runoff accumulation.",
+    "instructions": [
+      "This is demo data intended to demonstrate the notification display."
+    ],
+    "disclaimer": "DEMO DATA — NOT A VERIFIED FLOOD WARNING. DO NOT USE FOR REAL-WORLD EVACUATION DECISIONS."
+  }
+]

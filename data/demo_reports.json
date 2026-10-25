@@ -1,0 +1,72 @@
+[
+  {
+    "id": "DEMO-RPT-001",
+    "location_name": "Velachery 100 Feet Bypass Road near Vijayanagar Junction",
+    "latitude": 12.9815,
+    "longitude": 80.2180,
+    "category": "waterlogging",
+    "water_depth_estimate": "1.5 to 2.0 feet",
+    "description": "DEMO SAMPLE: Water stagnation along the service road towards SRP Tools. Two-wheelers wading with difficulty.",
+    "reported_at": "2026-10-25T08:15:00+05:30",
+    "status": "Demo Sample (Unverified)",
+    "is_demo": true,
+    "demo_disclaimer": "DEMO DATA — NOT A VERIFIED FLOOD LOCATION. FOR HACKATHON DEMONSTRATION ONLY.",
+    "reporter_type": "Demonstration Harness"
+  },
+  {
+    "id": "DEMO-RPT-002",
+    "location_name": "Madipakkam - Ram Nagar South 3rd Main Road",
+    "latitude": 12.9623,
+    "longitude": 80.2014,
+    "category": "drain_overflow",
+    "water_depth_estimate": "2.0 feet",
+    "description": "DEMO SAMPLE: Stormwater culvert backflow onto residential street. Pedestrian movement constrained.",
+    "reported_at": "2026-10-25T08:45:00+05:30",
+    "status": "Demo Sample (Unverified)",
+    "is_demo": true,
+    "demo_disclaimer": "DEMO DATA — NOT A VERIFIED FLOOD LOCATION. FOR HACKATHON DEMONSTRATION ONLY.",
+    "reporter_type": "Demonstration Harness"
+  },
+  {
+    "id": "DEMO-RPT-003",
+    "location_name": "Kolathur - Retteri Subway Approach Road",
+    "latitude": 13.1258,
+    "longitude": 80.2069,
+    "category": "road_obstruction",
+    "water_depth_estimate": "Over 2.5 feet (Subway)",
+    "description": "DEMO SAMPLE: Subway closed by traffic police. GCC diesel pump operating at inlet.",
+    "reported_at": "2026-10-25T07:50:00+05:30",
+    "status": "Demo Sample (Unverified)",
+    "is_demo": true,
+    "demo_disclaimer": "DEMO DATA — NOT A VERIFIED FLOOD LOCATION. FOR HACKATHON DEMONSTRATION ONLY.",
+    "reporter_type": "Demonstration Harness"
+  },
+  {
+    "id": "DEMO-RPT-004",
+    "location_name": "Mudichur - Outer Ring Road Junction (Adyar Basin)",
+    "latitude": 12.9157,
+    "longitude": 80.0754,
+    "category": "waterlogging",
+    "water_depth_estimate": "1.0 foot",
+    "description": "DEMO SAMPLE: Rainwater sheet accumulation in vacant lands adjoining residential layout.",
+    "reported_at": "2026-10-25T09:00:00+05:30",
+    "status": "Demo Sample (Unverified)",
+    "is_demo": true,
+    "demo_disclaimer": "DEMO DATA — NOT A VERIFIED FLOOD LOCATION. FOR HACKATHON DEMONSTRATION ONLY.",
+    "reporter_type": "Demonstration Harness"
+  },
+  {
+    "id": "DEMO-RPT-005",
+    "location_name": "Vyasarpadi - Ganesapuram Subway",
+    "latitude": 13.1092,
+    "longitude": 80.2608,
+    "category": "fallen_tree_powerline",
+    "water_depth_estimate": "Roadway clear of deep water, fallen branch",
+    "description": "DEMO SAMPLE: Large gulmohar tree branch leaning on low-hanging overhead telephone cable. Vehicles diverted.",
+    "reported_at": "2026-10-25T09:10:00+05:30",
+    "status": "Demo Sample (Unverified)",
+    "is_demo": true,
+    "demo_disclaimer": "DEMO DATA — NOT A VERIFIED FLOOD LOCATION. FOR HACKATHON DEMONSTRATION ONLY.",
+    "reporter_type": "Demonstration Harness"
+  }
+]

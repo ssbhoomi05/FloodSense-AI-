@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0f1d">
+  <meta name="description" content="FloodSense AI 2.0 — Flood Emergency Companion for Chennai, Tamil Nadu. Official alerts, community reports, offline safety guide, and verified helplines.">
+  <title>FloodSense AI 2.0 — Flood Emergency Companion</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json">
+
+  <!-- Leaflet CSS for Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+  <!-- Application Stylesheet -->
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <!-- Top System Status Banner -->
+  <aside id="system-status-banner" class="system-banner" role="status" aria-live="polite">
+    <div class="banner-content">
+      <span class="pulse-dot"></span>
+      <span id="system-status-text">DEMO &amp; VERIFIED ARCHIVE MODE — Automated live feeds unavailable. Displaying verified official advisories and test records.</span>
+    </div>
+    <span id="system-status-badge" class="banner-badge">Verified / Demo</span>
+  </aside>
+
+  <!-- Application Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-wrapper">
+        <div class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+        </div>
+        <div class="brand-text">
+          <h1>FloodSense AI 2.0 <span class="target-pill">📍 Chennai, TN</span></h1>
+          <div class="brand-sub">Flood Emergency Companion</div>
+        </div>
+      </div>
+
+      <!-- Desktop Navigation Bar -->
+      <nav class="desktop-nav" aria-label="Main Navigation">
+        <button class="nav-btn active" data-target-view="dashboard">Dashboard</button>
+        <button class="nav-btn" data-target-view="alerts">Alert Centre</button>
+        <button class="nav-btn" data-target-view="map-view">Flood Map</button>
+        <button class="nav-btn" data-target-view="report">Report Flood</button>
+        <button class="nav-btn" data-target-view="contacts">Emergency Helplines</button>
+        <button class="nav-btn" data-target-view="guide">Offline Guide</button>
+        <button class="nav-btn" data-target-view="shelters">Relief Centres</button>
+        <button class="nav-btn" data-target-view="risk">Risk Calculator</button>
+      </nav>
+
+      <!-- Quick Action: Call GCC 1913 -->
+      <a href="tel:1913" class="quick-dial-btn" title="Call Greater Chennai Corporation 24/7 Helpline">
+        <svg style="width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2.5;" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <span>GCC 1913</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main View Router Container -->
+  <main class="main-wrapper">
+
+    <!-- ====================================================================
+         VIEW A: HOME DASHBOARD (Feature A)
+         ==================================================================== -->
+    <section id="dashboard" class="view-section active" aria-labelledby="dash-title">
+      <div class="dashboard-hero">
+        <div class="hero-tag">Chennai Emergency Response Hub</div>
+        <h2 id="dash-title" class="hero-title">Prepare, Respond, and Stay Safe During Monsoon Floods</h2>
+        <p class="hero-desc">
+          Access verified advisories from IMD &amp; Greater Chennai Corporation, report localized waterlogging, review designated relief shelters, and carry vital safety guidance completely offline.
+        </p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" data-target-view="map-view">
+            🗺️ Open Chennai Flood Map
+          </button>
+          <button class="btn btn-secondary" data-target-view="report">
+            ⚠️ Submit Flood Observation
+          </button>
+          <button class="btn btn-secondary" data-target-view="guide">
+            📖 Offline Safety Guide
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Row -->
+      <div class="quick-stats-row">
+        <div class="stat-card">
+          <div class="stat-icon blue">
+            <svg viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          </div>
+          <div>
+            <div id="stat-alerts-count" class="stat-num">4</div>
+            <div class="stat-lbl">Active Bulletins</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon amber">
+            <svg viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>
+          </div>
+          <div>
+            <div id="stat-reports-count" class="stat-num">6</div>
+            <div class="stat-lbl">Logged Reports</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon green">
+            <svg viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          </div>
+          <div>
+            <div id="stat-shelters-count" class="stat-num">5</div>
+            <div class="stat-lbl">Relief Centres</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon red">
+            <svg viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          </div>
+          <div>
+            <div id="stat-contacts-count" class="stat-num">9</div>
+            <div class="stat-lbl">Verified Helplines</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature Shortcuts Grid -->
+      <div class="shortcuts-grid">
+        <div class="shortcut-card" data-target-view="map-view">
+          <div>
+            <div class="shortcut-top">
+              <div class="shortcut-icon blue">🗺️</div>
+              <span class="badge badge-official">Leaflet Map</span>
+            </div>
+            <h3>Chennai Flood Map</h3>
+            <p>Interactive spatial view of unverified community reports, clearly marked demo markers, and designated GCC relief centers.</p>
+          </div>
+          <span class="shortcut-link">Explore Map &rarr;</span>
+        </div>
+
+        <div class="shortcut-card" data-target-view="report">
+          <div>
+            <div class="shortcut-top">
+              <div class="shortcut-icon amber">📢</div>
+              <span class="badge badge-unverified">Crowd Reports</span>
+            </div>
+            <h3>Report Flooding</h3>
+            <p>Submit waterlogging or road obstruction observations with depth estimate, category, and optional GPS coordinates.</p>
+          </div>
+          <span class="shortcut-link">Submit Observation &rarr;</span>
+        </div>
+
+        <div class="shortcut-card" data-target-view="alerts">
+          <div>
+            <div class="shortcut-top">
+              <div class="shortcut-icon blue">🔔</div>
+              <span class="badge badge-official">Official Data</span>
+            </div>
+            <h3>Alert Centre</h3>
+            <p>Official advisories from IMD RMC Chennai, TNSDMA, and Greater Chennai Corporation with verified timestamps.</p>
+          </div>
+          <span class="shortcut-link">Check Bulletins &rarr;</span>
+        </div>
+
+        <div class="shortcut-card" data-target-view="guide">
+          <div>
+            <div class="shortcut-top">
+              <div class="shortcut-icon green">⚡</div>
+              <span class="badge badge-shelter">100% Offline</span>
+            </div>
+            <h3>Offline Safety Guide</h3>
+            <p>NDMA &amp; TNSDMA safety protocols, interactive emergency go-bag checklist, and electrical precautions accessible with zero internet.</p>
+          </div>
+          <span class="shortcut-link">View Offline Guide &rarr;</span>
+        </div>
+
+        <div class="shortcut-card" data-target-view="contacts">
+          <div>
+            <div class="shortcut-top">
+              <div class="shortcut-icon red">📞</div>
+              <span class="badge badge-warning">24/7 Helplines</span>
+            </div>
+            <h3>Emergency Contacts</h3>
+            <p>Verified telephone directory including GCC Control Room 1913, State Disaster 1070, and TANGEDCO power safety.</p>
+          </div>
+          <span class="shortcut-link">View Directory &rarr;</span>
+        </div>
+
+        <div class="shortcut-card" data-target-view="risk">
+          <div>
+            <div class="shortcut-top">
+              <div class="shortcut-icon blue">📊</div>
+              <span class="badge badge-demo">Experimental</span>
+            </div>
+            <h3>Risk Assessment</h3>
+            <p>Transparent ward-level vulnerability calculator evaluating historical waterlogging, elevation, and drainage basin capacity.</p>
+          </div>
+          <span class="shortcut-link">Calculate Zone Risk &rarr;</span>
+        </div>
+      </div>
+
+      <!-- Quick Summary Snippets Row -->
+      <div class="grid-3">
+        <div class="card">
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+            <span>🔔 Latest Official Bulletin</span>
+          </h3>
+          <div id="dashboard-alerts-snippet">
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Loading official bulletins...</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+            <span>⚠️ Recent Community Reports</span>
+          </h3>
+          <div id="dashboard-reports-snippet">
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Loading community reports...</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+            <span>📞 Direct Helplines</span>
+          </h3>
+          <div id="dashboard-contacts-snippet">
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Loading emergency contacts...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW B: ALERT CENTRE (Feature B)
+         ==================================================================== -->
+    <section id="alerts" class="view-section" aria-labelledby="alerts-title">
+      <div class="section-header">
+        <h2 id="alerts-title" class="section-title">Official Weather &amp; Flood Alert Centre</h2>
+        <p class="section-subtitle">Verified meteorological bulletins and administrative advisories for Chennai and adjoining districts.</p>
+      </div>
+
+      <div class="notice-box warning">
+        <strong>Data Source Transparency:</strong>
+        Bulletins displayed below are curated directly from published notifications issued by the India Meteorological Department (IMD) RMC Chennai and Greater Chennai Corporation (GCC). Automated public real-time APIs are not provided by these agencies; records are maintained with explicit timestamps and direct verification links.
+      </div>
+
+      <div id="alerts-list-container">
+        <!-- Rendered by js/alerts.js -->
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW C: FLOOD MAP (Feature C)
+         ==================================================================== -->
+    <section id="map-view" class="view-section" aria-labelledby="map-title">
+      <div class="section-header">
+        <h2 id="map-title" class="section-title">Interactive Chennai Flood Map</h2>
+        <p class="section-subtitle">Spatial tracking of community reports, designated relief facilities, and demonstration records.</p>
+      </div>
+
+      <div class="notice-box">
+        <strong>Safety Advisory:</strong>
+        FloodSense AI 2.0 does not predict guaranteed safe corridors or routes. Conditions change rapidly during heavy monsoon rainfall. Avoid traversing subways and inundated causeways.
+      </div>
+
+      <div class="map-container-wrapper">
+        <div class="map-toolbar">
+          <div class="map-filters">
+            <button class="filter-chip active" data-filter="all">All Layers</button>
+            <button class="filter-chip" data-filter="community">Community (Unverified)</button>
+            <button class="filter-chip" data-filter="demo">Demo Markers</button>
+            <button class="filter-chip" data-filter="shelters">Relief Shelters</button>
+          </div>
+          <span id="map-marker-count" style="font-size: 0.8rem; color: var(--accent-cyan); font-weight: 600;">
+            Loading map data...
+          </span>
+        </div>
+
+        <div id="map-toast-message" style="display: none; background: #0284c7; color: #fff; padding: 10px 16px; font-size: 0.85rem; font-weight: 600; text-align: center;"></div>
+
+        <!-- Leaflet Map Container -->
+        <div id="map" role="application" aria-label="Interactive Map of Chennai Flood Observations"></div>
+
+        <!-- Map Legend -->
+        <div class="map-legend">
+          <strong style="color: #fff;">Map Legend:</strong>
+          <div class="legend-item">
+            <span class="legend-marker unverified"></span>
+            <span>Community Report (Unverified)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-marker demo"></span>
+            <span>DEMO DATA (Synthetic / Presentation)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-marker shelter"></span>
+            <span>Designated GCC Relief Centre</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW D: COMMUNITY FLOOD REPORTING (Feature D)
+         ==================================================================== -->
+    <section id="report" class="view-section" aria-labelledby="report-title">
+      <div class="section-header">
+        <h2 id="report-title" class="section-title">Community Flood Reporting</h2>
+        <p class="section-subtitle">Submit eyewitness observations of waterlogging, drain backflow, or hazards to assist fellow citizens.</p>
+      </div>
+
+      <div class="notice-box warning">
+        <strong>Important Verification Notice:</strong>
+        All submitted reports are classified as <strong>"Unverified"</strong> until reviewed by municipal authorities. Citizen reports are NOT official government warnings. For life-threatening emergencies, call <strong>1913</strong> or <strong>108</strong> directly.
+      </div>
+
+      <div class="grid-2">
+        <!-- Submission Form Card -->
+        <div class="form-card">
+          <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 16px;">Submit Waterlogging Report</h3>
+
+          <div id="report-feedback-msg" style="display: none;"></div>
+
+          <form id="flood-report-form" novalidate>
+            <div class="form-group">
+              <label for="report-location" class="form-label">
+                Location or Area Name <span class="required">*</span>
+              </label>
+              <input type="text" id="report-location" class="form-input" placeholder="e.g. Velachery 100ft Rd near Vijayanagar Junction" required>
+              <div class="form-help">Specify street, landmark, or subway name.</div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="report-category" class="form-label">Category</label>
+                <select id="report-category" class="form-select">
+                  <option value="waterlogging">Waterlogging / Street Flooding</option>
+                  <option value="drain_overflow">Drain / Storm Sewer Overflow</option>
+                  <option value="road_obstruction">Road / Subway Obstruction</option>
+                  <option value="fallen_tree_powerline">Fallen Tree / Submerged Powerline Hazard</option>
+                  <option value="other">Other Hazard</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="report-depth" class="form-label">Estimated Water Depth</label>
+                <select id="report-depth" class="form-select">
+                  <option value="Ankle Deep (< 0.5 ft)">Ankle Deep (&lt; 0.5 ft)</option>
+                  <option value="Knee Deep (1.0 to 1.5 ft)">Knee Deep (1.0 to 1.5 ft)</option>
+                  <option value="Waist Deep (2.0 to 3.0 ft)">Waist Deep (2.0 to 3.0 ft)</option>
+                  <option value="Submerged Vehicles (> 3.0 ft)">Submerged Vehicles (&gt; 3.0 ft)</option>
+                  <option value="Not Specified">Not Specified / Road Blockage</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="report-description" class="form-label">
+                Condition Description <span class="required">*</span>
+              </label>
+              <textarea id="report-description" class="form-textarea" rows="3" placeholder="Describe the water stagnation, traffic impact, or local conditions..." required></textarea>
+            </div>
+
+            <!-- Optional Geographic Coordinates -->
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px; margin-bottom: 18px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <label class="form-label" style="margin-bottom: 0;">Coordinates (Optional)</label>
+                <div style="display: flex; gap: 6px;">
+                  <button type="button" id="btn-get-current-gps" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.76rem;">
+                    📍 Use GPS
+                  </button>
+                  <button type="button" id="btn-pick-location" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.76rem;">
+                    🗺️ Pick on Map
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div>
+                  <input type="number" step="any" id="report-lat" class="form-input" placeholder="Latitude (e.g. 13.0185)">
+                </div>
+                <div>
+                  <input type="number" step="any" id="report-lng" class="form-input" placeholder="Longitude (e.g. 80.2392)">
+                </div>
+              </div>
+              <div id="gps-status-text" class="form-help" style="margin-top: 6px;">
+                Leave empty if coordinates are unknown; location name will suffice.
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="report-name" class="form-label">Reporter Name / Alias (Optional)</label>
+              <input type="text" id="report-name" class="form-input" placeholder="e.g. Community Volunteer Karthik">
+            </div>
+
+            <button type="submit" id="btn-submit-report" class="btn btn-primary btn-block">
+              Submit Community Report
+            </button>
+          </form>
+        </div>
+
+        <!-- Recent Submitted Reports Stream -->
+        <div>
+          <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 14px;">Recent Community Reports Stream</h3>
+          <div id="recent-reports-container">
+            <!-- Rendered by js/reports.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW E: EMERGENCY CONTACTS DIRECTORY (Feature E)
+         ==================================================================== -->
+    <section id="contacts" class="view-section" aria-labelledby="contacts-title">
+      <div class="section-header">
+        <h2 id="contacts-title" class="section-title">Verified Chennai Emergency Contacts</h2>
+        <p class="section-subtitle">Official 24/7 helplines verified with the Chennai District Collectorate and Greater Chennai Corporation.</p>
+      </div>
+
+      <div class="contact-search-bar">
+        <input type="search" id="contacts-search-input" class="form-input" placeholder="Search by department name, keyword, or service (e.g. 'power', 'waterlogging', 'police')...">
+      </div>
+
+      <div id="contacts-list-container" class="grid-3">
+        <!-- Rendered by js/contacts.js -->
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW F: OFFLINE FLOOD SAFETY GUIDE (Feature F)
+         ==================================================================== -->
+    <section id="guide" class="view-section" aria-labelledby="guide-title">
+      <div class="section-header">
+        <h2 id="guide-title" class="section-title">Offline Flood Safety &amp; Preparedness Guide</h2>
+        <p class="section-subtitle">Official NDMA &amp; TNSDMA emergency protocols. Fully accessible without an active internet connection.</p>
+      </div>
+
+      <div class="notice-box">
+        <strong>📶 Offline Resilience:</strong> This guide and your personal preparedness checklist are cached in your browser. They remain functional when cellular towers or internet connectivity fail during severe storms.
+      </div>
+
+      <!-- Guide Section Tabs -->
+      <div class="guide-tabs">
+        <button class="guide-tab-btn active" data-guide-tab="checklist">✅ Preparedness Checklist</button>
+        <button class="guide-tab-btn" data-guide-tab="before">⚠️ Before Flooding</button>
+        <button class="guide-tab-btn" data-guide-tab="during">🌊 During Flooding</button>
+        <button class="guide-tab-btn" data-guide-tab="after">🧹 After Floodwaters Recede</button>
+        <button class="guide-tab-btn" data-guide-tab="electrical">⚡ Electrical &amp; Water Safety</button>
+      </div>
+
+      <!-- Tab 1: Interactive Checklist -->
+      <div id="guide-panel-checklist" class="guide-content-panel active">
+        <div class="card" style="margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 700;">Monsoon Readiness Checklist</h3>
+              <p style="font-size: 0.82rem; color: var(--text-muted);">Check off items as you assemble your emergency kit. Saved automatically in local storage.</p>
+            </div>
+            <button id="btn-reset-checklist" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.76rem;">Reset</button>
+          </div>
+
+          <!-- Progress Bar -->
+          <div style="margin-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 4px;">
+              <span>Readiness Progress</span>
+              <span id="checklist-progress-text" style="font-weight: 700; color: var(--accent-green);">0 of 8 Ready</span>
+            </div>
+            <div style="height: 8px; background: var(--bg-secondary); border-radius: 4px; overflow: hidden;">
+              <div id="checklist-progress-fill" style="height: 100%; width: 0%; background: var(--accent-green); transition: width 0.3s ease;"></div>
+            </div>
+          </div>
+
+          <div class="checklist-items-wrapper">
+            <label class="guide-checklist-item">
+              <input type="checkbox" class="guide-checkbox" data-check-id="item-water">
+              <div class="checklist-text">
+                <h4>Drinking Water Supply (3-Day Minimum)</h4>
+                <p>Store at least 4 litres of boiled or packaged water per person per day in sealed containers.</p>
+              </div>
+            </label>
+
+            <label class="guide-checklist-item">
+              <input type="checkbox" class="guide-checkbox" data-check-id="item-food">
+              <div class="checklist-text">
+                <h4>Dry, Non-Perishable Food</h4>
+                <p>Biscuits, flattened rice (aval), dry fruits, nuts, ready-to-eat packets, and baby food if required.</p>
+              </div>
+            </label>
+
+            <label class="guide-checklist-item">
+              <input type="checkbox" class="guide-checkbox" data-check-id="item-power">
+              <div class="checklist-text">
+                <h4>Power Banks &amp; Emergency Lighting</h4>
+                <p>Fully charged power banks, LED torches, spare batteries, and candles with waterproof matches.</p>
+              </div>
+            </label>
+
+            <label class="guide-checklist-item">
+              <input type="checkbox" class="guide-checkbox" data-check-id="item-docs">
+              <div class="checklist-text">
+                <h4>Important Documents in Waterproof Bags</h4>
+                <p>Aadhaar cards, property papers, insurance, medical prescriptions sealed in zip-lock bags.</p>
+              </div>
+            </label>
+
+            <label class="guide-checklist-item">
+              <input type="checkbox" class="guide-checkbox" data-check-id="item-meds">
+              <div class="checklist-text">
+                <h4>First Aid &amp; Critical Medications</h4>
+                <p>Paracetamol, ORS packets, antiseptic ointment, band-aids, and a 10-day supply of daily prescription drugs.</p>
+              </div>
+            </label>
+
+            <label class="guide-checklist-item">
+              <input type="checkbox" class="guide-checkbox" data-check-id="item-whistle">
+              <div class="checklist-text">
+                <h4>Emergency Whistle &amp; Bright Cloth</h4>
+                <p>To signal boat rescue personnel or disaster response teams if trapped without mobile connectivity.</p>
+              </div>
+            </label>
+
+            <label class="guide-checklist-item">
+              <input type="checkbox" class="guide-checkbox" data-check-id="item-cash">
+              <div class="checklist-text">
+                <h4>Emergency Cash in Small Denominations</h4>
+                <p>ATMs and UPI payment systems fail during prolonged city-wide power outages.</p>
+              </div>
+            </label>
+
+            <label class="guide-checklist-item">
+              <input type="checkbox" class="guide-checkbox" data-check-id="item-elevate">
+              <div class="checklist-text">
+                <h4>Elevate Ground Floor Valuables</h4>
+                <p>Move electrical appliances, inverters, and laptops to tables or upper floors before water enters.</p>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Before Flooding -->
+      <div id="guide-panel-before" class="guide-content-panel">
+        <div class="card" style="margin-bottom: 16px;">
+          <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; color: var(--accent-cyan);">Before Floodwater Enters Your Neighborhood</h3>
+          <ul class="alert-instructions-list">
+            <li><strong>Monitor Official Advisories:</strong> Keep track of IMD bulletins and Greater Chennai Corporation announcements via radio or battery-powered devices.</li>
+            <li><strong>Clear Terrace Drains:</strong> Ensure terrace downpipes and balcony weep-holes are clear of dead leaves to prevent roof ponding.</li>
+            <li><strong>Park Vehicles on Higher Ground:</strong> If living in chronic low-lying sectors (Velachery, Madipakkam, Mudichur), relocate vehicles to multi-level parking or elevated flyover margins where designated by traffic police.</li>
+            <li><strong>Disconnect External Drain Valves:</strong> Ensure non-return valves are fitted to prevent sewage back-siphonage into ground-floor bathrooms.</li>
+            <li><strong>Charge Everything:</strong> Top up inverters, power banks, and electric emergency lanterns while grid power is still stable.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Tab 3: During Flooding -->
+      <div id="guide-panel-during" class="guide-content-panel">
+        <div class="card" style="margin-bottom: 16px;">
+          <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; color: var(--accent-red);">During Active Flooding (Critical Life Safety)</h3>
+          <ul class="alert-instructions-list">
+            <li><strong>Turn Off Main MCB:</strong> If floodwater begins entering your ground floor, immediately switch off your home's main electrical breaker (MCB) to prevent fatal electrocution.</li>
+            <li><strong>Turn Around, Don't Drown:</strong> Never walk, wade, or drive through flowing water. Just 15 cm (6 inches) of rapid water can knock an adult off their feet; 30 cm (1 foot) can float a car.</li>
+            <li><strong>Open Manhole Hazards:</strong> Dislodged manhole covers are the #1 drowning risk on flooded Chennai streets. Never allow children to wade in murky water.</li>
+            <li><strong>Do Not Drink Tap Water:</strong> Floodwaters contaminate municipal distribution lines. Boil all drinking water vigorously for at least 1 minute or use chlorine purification tablets.</li>
+            <li><strong>Call GCC 1913 or TNFRS 101:</strong> If water level reaches dangerous heights, signal with a whistle from the balcony or terrace and dial 1913 for boat evacuation.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Tab 4: After Flooding -->
+      <div id="guide-panel-after" class="guide-content-panel">
+        <div class="card" style="margin-bottom: 16px;">
+          <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; color: var(--accent-green);">After Floodwaters Recede</h3>
+          <ul class="alert-instructions-list">
+            <li><strong>Watch for Snakes &amp; Scorpions:</strong> Reptiles seek refuge in higher dry spots inside houses, cupboards, and rolled mattresses. Inspect corners with a flashlight before reaching in.</li>
+            <li><strong>Do Not Switch Power Back On Blindly:</strong> Have a licensed electrician inspect submerged wiring, outlets, and inverters before energizing the main switch.</li>
+            <li><strong>Disinfect Sump &amp; Overhead Tanks:</strong> Drain floodwater from sumps, scrub with bleaching powder solution (chlorination), and flush thoroughly before refilling.</li>
+            <li><strong>Prevent Leptospirosis (Rat Fever):</strong> Wear waterproof rubber boots during clean-up. Wash cuts immediately with soap and consult a GCC primary health centre for prophylactic doxycycline if advised.</li>
+            <li><strong>Document Property Damage:</strong> Take clear photographs and video of water levels and damaged goods before disposal for insurance claims.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Tab 5: Electrical & Water Safety -->
+      <div id="guide-panel-electrical" class="guide-content-panel">
+        <div class="card" style="margin-bottom: 16px;">
+          <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; color: var(--accent-amber);">Electrical &amp; Water Contamination Protocols</h3>
+          <div class="grid-2">
+            <div>
+              <h4 style="font-weight: 700; margin-bottom: 6px; color: #f87171;">⚡ Electrical Shock Hazards</h4>
+              <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 8px;">
+                TANGEDCO de-energizes distribution feeders in waterlogged neighborhoods to prevent mass electrocution.
+              </p>
+              <ul class="alert-instructions-list" style="padding-left: 16px;">
+                <li>Stay at least 10 metres away from snapped power cables.</li>
+                <li>Never touch metal lampposts or transformers submerged in standing water.</li>
+                <li>Report sparks or fallen lines immediately to TANGEDCO Helpline: <strong>94987 94987</strong>.</li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 style="font-weight: 700; margin-bottom: 6px; color: #38bdf8;">💧 Safe Water Protocols</h4>
+              <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 8px;">
+                Waterborne pathogens (cholera, typhoid, E. coli) surge in standing urban runoff.
+              </p>
+              <ul class="alert-instructions-list" style="padding-left: 16px;">
+                <li>Boil water at a rolling boil for a full 60 seconds.</li>
+                <li>If fuel is unavailable, use chlorine tablets (halazone) as directed.</li>
+                <li>Discard any food item that touched floodwater, including canned items with dented or rusted seams.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW G: RELIEF & SHELTER DIRECTORY (Feature G)
+         ==================================================================== -->
+    <section id="shelters" class="view-section" aria-labelledby="shelters-title">
+      <div class="section-header">
+        <h2 id="shelters-title" class="section-title">Designated Flood Relief &amp; Evacuation Centres</h2>
+        <p class="section-subtitle">Officially allocated municipal welfare halls equipped for flood displacement in Chennai.</p>
+      </div>
+
+      <div class="notice-box warning">
+        <strong>Important Facility Classification:</strong>
+        General homeless night shelters are <strong>NOT</strong> automatically flood relief centres. The centres listed below are designated Greater Chennai Corporation (GCC) multi-purpose relief centres activated during Orange and Red alert conditions. Before travelling, confirm operational activation with the GCC Control Room at <strong>1913</strong>.
+      </div>
+
+      <div id="shelters-list-container">
+        <!-- Rendered by js/shelters.js -->
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW H: PRELIMINARY RISK ASSESSMENT (Feature H - Optional/Experimental)
+         ==================================================================== -->
+    <section id="risk" class="view-section" aria-labelledby="risk-title">
+      <div class="section-header">
+        <h2 id="risk-title" class="section-title">Preliminary Flood Risk Assessment Tool</h2>
+        <p class="section-subtitle">Transparent, rule-based heuristic indicator evaluating Chennai municipal ward vulnerability.</p>
+      </div>
+
+      <div class="notice-box danger">
+        <strong>⚠️ EXPERIMENTAL INDICATOR ONLY — NOT AN OFFICIAL FORECAST:</strong>
+        This tool uses a transparent rule-based composite scoring formula based on published municipal drainage basin studies, elevation depression traits, and historical waterlogging frequency. It does <strong>NOT</strong> replace official India Meteorological Department (IMD) or Central Water Commission (CWC) warnings.
+      </div>
+
+      <div class="grid-2">
+        <!-- Calculator Controls & Inputs -->
+        <div class="risk-calculator-box">
+          <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 16px;">Select Ward &amp; Weather Scenario</h3>
+
+          <div class="form-group">
+            <label for="risk-zone-select" class="form-label">Chennai Municipal Zone / Neighborhood</label>
+            <select id="risk-zone-select" class="form-select">
+              <!-- Rendered by js/risk.js -->
+            </select>
+            <div class="form-help">Evaluates drainage basin constraints and historical flooding frequency.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="risk-rain-select" class="form-label">Rainfall Scenario (Observed or Forecast)</label>
+            <select id="risk-rain-select" class="form-select">
+              <option value="1.0">Moderate Rain (15 - 64 mm/day) — Baseline</option>
+              <option value="0.5">Light Rain (&lt; 15 mm/day) — Multiplier 0.5x</option>
+              <option value="1.4">Heavy Rain (65 - 115 mm/day) — Multiplier 1.4x (Orange Alert)</option>
+              <option value="1.8">Very Heavy Rain (&gt; 115 mm/day) — Multiplier 1.8x (Red Alert)</option>
+            </select>
+          </div>
+
+          <div class="formula-card">
+            <strong>Scoring Methodology:</strong><br>
+            <code>Composite Score = Min(100, Base Vulnerability × Rain Multiplier)</code><br>
+            <span style="font-size: 0.74rem;">
+              Base Vulnerability weights: Historical Frequency (40%) + Elevation Depression (&lt;5m MSL) (30%) + Drainage Basin Bottleneck (30%).
+            </span>
+          </div>
+        </div>
+
+        <!-- Risk Calculation Output Gauge -->
+        <div class="risk-gauge-container">
+          <h3 style="font-size: 1rem; color: var(--text-muted); margin-bottom: 4px;">Computed Vulnerability Indicator</h3>
+          <div id="risk-score-value" class="risk-score-display">--/100</div>
+          <div>
+            <span id="risk-badge" class="risk-level-badge">Analyzing...</span>
+          </div>
+
+          <div class="risk-meter">
+            <div id="risk-meter-fill" class="risk-meter-fill"></div>
+          </div>
+
+          <!-- Zone Traits Breakdown -->
+          <div style="text-align: left; background: var(--bg-card); padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); margin-top: 14px; font-size: 0.84rem;">
+            <p style="margin-bottom: 4px;"><strong style="color: #fff;">Selected Zone:</strong> <span id="risk-zone-name">--</span></p>
+            <p style="margin-bottom: 4px;"><strong>Drainage Basin:</strong> <span id="risk-basin-info" style="color: var(--accent-cyan);">--</span></p>
+            <p style="margin-bottom: 4px;"><strong>Elevation Profile:</strong> <span id="risk-elevation-info">--</span></p>
+            <p style="margin-bottom: 4px;"><strong>Drainage Outlet:</strong> <span id="risk-outlet-info">--</span></p>
+            <p style="margin-bottom: 8px;"><strong>Chronic Hotspots:</strong> <span id="risk-chronic-spots" style="color: #fef08a;">--</span></p>
+            <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
+              <strong style="color: #fff;">Recommended Precaution:</strong>
+              <p id="risk-action-rec" style="color: #cbd5e1; margin-top: 2px;">--</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Mobile Bottom Sticky Navigation Bar -->
+  <nav class="mobile-bottom-nav" aria-label="Mobile Navigation">
+    <button class="mobile-nav-item active" data-target-view="dashboard">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </button>
+    <button class="mobile-nav-item" data-target-view="map-view">
+      <svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+      <span>Map</span>
+    </button>
+    <button class="mobile-nav-item" data-target-view="report">
+      <svg viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      <span>Report</span>
+    </button>
+    <button class="mobile-nav-item" data-target-view="contacts">
+      <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <span>Helpline</span>
+    </button>
+    <button class="mobile-nav-item" data-target-view="guide">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span>Guide</span>
+    </button>
+  </nav>
+
+  <!-- Leaflet JavaScript Library -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Application Modules -->
+  <script src="/js/alerts.js"></script>
+  <script src="/js/contacts.js"></script>
+  <script src="/js/guide.js"></script>
+  <script src="/js/shelters.js"></script>
+  <script src="/js/risk.js"></script>
+  <script src="/js/reports.js"></script>
+  <script src="/js/map.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
