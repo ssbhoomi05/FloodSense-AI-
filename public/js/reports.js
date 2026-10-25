@@ -63,6 +63,14 @@ const ReportsModule = {
   },
 
   async fetchReports() {
+    const container = document.getElementById('recent-reports-container');
+    if (container && (!this.reportsList || this.reportsList.length === 0)) {
+      container.innerHTML = `
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      `;
+    }
+
     try {
       const res = await fetch('/api/reports');
       if (res.ok) {
@@ -70,9 +78,25 @@ const ReportsModule = {
         this.reportsList = data.reports || [];
         this.renderReportsList();
         this.renderDashboardSnippet();
+      } else {
+        this.renderErrorState(`Server returned HTTP ${res.status}`);
       }
     } catch (err) {
       console.warn('Could not load reports list:', err);
+      this.renderErrorState(err.message);
+    }
+  },
+
+  renderErrorState(msg) {
+    const container = document.getElementById('recent-reports-container');
+    if (container) {
+      container.innerHTML = `
+        <div class="error-state-card">
+          <h3>⚠️ Unable to Load Community Reports</h3>
+          <p>${msg || 'Failed to retrieve reports from database.'}</p>
+          <button class="retry-btn" onclick="ReportsModule.fetchReports()">🔄 Retry Stream</button>
+        </div>
+      `;
     }
   },
 

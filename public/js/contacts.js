@@ -22,6 +22,15 @@ const ContactsModule = {
   },
 
   async fetchContacts() {
+    const container = document.getElementById('contacts-list-container');
+    if (container) {
+      container.innerHTML = `
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      `;
+    }
+
     try {
       const res = await fetch('/api/contacts');
       if (res.ok) {
@@ -29,9 +38,25 @@ const ContactsModule = {
         this.contacts = json.data || [];
         this.renderContacts(this.contacts);
         this.renderDashboardSnippet();
+      } else {
+        this.renderErrorState(`Server returned HTTP ${res.status}`);
       }
     } catch (err) {
       console.warn('Could not fetch /api/contacts:', err);
+      this.renderErrorState(err.message);
+    }
+  },
+
+  renderErrorState(msg) {
+    const container = document.getElementById('contacts-list-container');
+    if (container) {
+      container.innerHTML = `
+        <div class="error-state-card" style="grid-column: 1 / -1;">
+          <h3>⚠️ Unable to Load Emergency Contacts</h3>
+          <p>${msg || 'Could not connect to directory.'}</p>
+          <button class="retry-btn" onclick="ContactsModule.fetchContacts()">🔄 Retry Loading</button>
+        </div>
+      `;
     }
   },
 

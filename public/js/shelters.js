@@ -11,12 +11,22 @@ const SheltersModule = {
   },
 
   async fetchShelters() {
+    const container = document.getElementById('shelters-list-container');
+    if (container) {
+      container.innerHTML = `
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      `;
+    }
+
     try {
       const res = await fetch('/api/shelters');
       if (res.ok) {
         const json = await res.json();
         this.shelters = json.data || [];
         this.renderShelters();
+      } else {
+        this.renderFallback();
       }
     } catch (err) {
       console.warn('Could not fetch /api/shelters:', err);

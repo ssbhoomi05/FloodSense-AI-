@@ -12,6 +12,15 @@ const AlertsModule = {
   },
 
   async fetchAlerts() {
+    const container = document.getElementById('alerts-list-container');
+    if (container) {
+      container.innerHTML = `
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      `;
+    }
+
     try {
       const res = await fetch('/api/alerts');
       if (res.ok) {
@@ -19,10 +28,12 @@ const AlertsModule = {
         this.alerts = json.data || [];
         this.renderAlerts();
         this.renderDashboardSnippet();
+      } else {
+        this.renderErrorState(`Server returned HTTP ${res.status}`);
       }
     } catch (err) {
       console.warn('Could not fetch /api/alerts:', err.message);
-      this.renderErrorState();
+      this.renderErrorState(err.message);
     }
   },
 
@@ -122,12 +133,14 @@ const AlertsModule = {
     });
   },
 
-  renderErrorState() {
+  renderErrorState(errMsg) {
     const container = document.getElementById('alerts-list-container');
     if (container) {
       container.innerHTML = `
-        <div class="notice-box warning">
-          <strong>Notice:</strong> Unable to load live alerts from server. Cached or default bulletins may be displayed when available.
+        <div class="error-state-card">
+          <h3>⚠️ Unable to Load Official Bulletins</h3>
+          <p>${errMsg || 'Failed to connect to the alerts service. If you are offline, cached bulletins will appear when available.'}</p>
+          <button class="retry-btn" onclick="AlertsModule.fetchAlerts()">🔄 Retry Ingestion</button>
         </div>
       `;
     }
