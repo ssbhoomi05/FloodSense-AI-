@@ -4,17 +4,17 @@
    ========================================================================== */
 
 :root {
-  --bg-primary: #0a0f1d;
-  --bg-secondary: #111a2e;
-  --bg-tertiary: #19243c;
+  --bg-primary: #060c28e9;
+  --bg-secondary: #324e90;
+  --bg-tertiary: #4186ca;
   --bg-card: #131d33;
   --bg-card-hover: #1c2a47;
   --border-subtle: #233352;
-  --border-focus: #38bdf8;
+  --border-focus: #2975bd;
 
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
-  --text-dim: #64748b;
+  --text-dim: #acb8c9;
 
   --accent-blue: #0284c7;
   --accent-cyan: #38bdf8;
